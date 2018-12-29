@@ -34,6 +34,36 @@
 #ifndef __M_MENU__
 #define __M_MENU__
 
+#include <stdio.h>
+#include <fcntl.h>
+
+#include "doomdef.h"
+#include "doomstat.h"
+#include "dstrings.h"
+#include "d_main.h"
+#include "v_video.h"
+#include "w_wad.h"
+#include "r_main.h"
+#include "hu_stuff.h"
+#include "st_stuff.h"
+#include "g_game.h"
+#include "s_sound.h"
+#include "sounds.h"
+#include "m_menu.h"
+#include "d_deh.h"
+#include "m_misc.h"
+#include "lprintf.h"
+#include "am_map.h"
+#include "i_main.h"
+#include "i_system.h"
+#include "i_video.h"
+#include "i_sound.h"
+#include "r_demo.h"
+#include "r_fps.h"
+#include "e6y.h"//e6y
+#ifdef _WIN32
+#include "e6y_launcher.h"
+#endif
 #include "d_event.h"
 
 //
@@ -77,7 +107,7 @@ void M_DrawCredits(void);    // killough 11/98
 
 /* killough 8/15/98: warn about changes not being committed until next game */
 #define warn_about_changes(x) (warning_about_changes=(x), \
-             print_warning_about_changes = 2)
+                               print_warning_about_changes = 2)
 
 extern int warning_about_changes, print_warning_about_changes;
 
@@ -138,10 +168,10 @@ extern dboolean menu_background;
  */
 
 typedef enum {
-  m_null,       // Has no meaning; not applicable
-  m_scrn,       // A key can not be assigned to more than one action
-  m_map,        // in the same group. A key can be assigned to one
-  m_menu,       // action in one group, and another action in another.
+    m_null,       // Has no meaning; not applicable
+    m_scrn,       // A key can not be assigned to more than one action
+    m_map,        // in the same group. A key can be assigned to one
+    m_menu,       // action in one group, and another action in another.
 } setup_group;
 
 /****************************
@@ -161,27 +191,25 @@ typedef enum {
  * Moved from m_menu.c to m_menu.h so that m_misc.c can use it.
  */
 
-typedef struct setup_menu_s
-{
-  const char  *m_text;  /* text to display */
-  int         m_flags;  /* phares 4/17/98: flag bits S_* (defined above) */
-  setup_group m_group;  /* Group */
-  short       m_x;      /* screen x position (left is 0) */
-  short       m_y;      /* screen y position (top is 0) */
+typedef struct setup_menu_s {
+    const char  *m_text;  /* text to display */
+    int         m_flags;  /* phares 4/17/98: flag bits S_* (defined above) */
+    setup_group m_group;  /* Group */
+    short       m_x;      /* screen x position (left is 0) */
+    short       m_y;      /* screen y position (top is 0) */
 
-  union  /* killough 11/98: The first field is a union of several types */
-  {
-    const void          *var;   /* generic variable */
-    int                 *m_key; /* key value, or 0 if not shown */
-    const char          *name;  /* name */
-    struct default_s    *def;   /* default[] table entry */
-    struct setup_menu_s *menu;  /* next or prev menu */
-  } var;
+    union { /* killough 11/98: The first field is a union of several types */
+        const void          *var;   /* generic variable */
+        int                 *m_key; /* key value, or 0 if not shown */
+        const char          *name;  /* name */
+        struct default_s    *def;   /* default[] table entry */
+        struct setup_menu_s *menu;  /* next or prev menu */
+    } var;
 
-  int         *m_mouse; /* mouse button value, or 0 if not shown */
-  int         *m_joy;   /* joystick button value, or 0 if not shown */
-  void (*action)(void); /* killough 10/98: function to call after changing */
-  const char **selectstrings; /* list of strings for choice value */
+    int         *m_mouse; /* mouse button value, or 0 if not shown */
+    int         *m_joy;   /* joystick button value, or 0 if not shown */
+    void (*action)(void); /* killough 10/98: function to call after changing */
+    const char **selectstrings; /* list of strings for choice value */
 } setup_menu_t;
 
 #endif

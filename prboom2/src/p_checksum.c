@@ -13,7 +13,7 @@ static void p_checksum_cleanup(void);
 void checksum_gamestate(int tic);
 
 /* vars */
-static void p_checksum_nop(int tic){} /* do nothing */
+static void p_checksum_nop(int tic) {} /* do nothing */
 void (*P_Checksum)(int) = p_checksum_nop;
 
 /*
@@ -50,7 +50,7 @@ void P_ChecksumFinal(void) {
     unsigned char digest[16];
 
     if (!outfile)
-      return;
+        return;
 
     MD5Final(digest, &md5global);
     fprintf(outfile, "final: ");

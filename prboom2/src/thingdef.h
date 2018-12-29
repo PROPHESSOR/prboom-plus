@@ -8,10 +8,9 @@ extern "C"
 }
 
 // move me!
-struct FDropItem
-{
-	mobjtype_t mobjtype;
-	FDropItem * Next;
+struct FDropItem {
+    mobjtype_t mobjtype;
+    FDropItem * Next;
 };
 
 extern TArray<FDropItem *> DropItemList;

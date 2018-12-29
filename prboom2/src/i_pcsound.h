@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2007 Simon Howard
@@ -19,7 +19,7 @@
 // 02111-1307, USA.
 //
 // DESCRIPTION:
-//	System interface for PC speaker sound.
+//  System interface for PC speaker sound.
 //
 //-----------------------------------------------------------------------------
 

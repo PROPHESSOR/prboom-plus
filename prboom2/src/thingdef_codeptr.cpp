@@ -63,13 +63,12 @@ TArray<FDropItem *> DropItemList;
 //
 //==========================================================================
 
-int CheckIndex(mobj_t *mo, unsigned int paramsize)
-{
-	if (mo->state->misc1 == STATEPARAM_ID) return -1;
+int CheckIndex(mobj_t *mo, unsigned int paramsize) {
+    if (mo->state->misc1 == STATEPARAM_ID) return -1;
 
-	size_t index = (size_t)mo->state->misc2;
-	if (index > StateParameters.Size() - paramsize) return -1;
-	return (int)index;
+    size_t index = (size_t)mo->state->misc2;
+    if (index > StateParameters.Size() - paramsize) return -1;
+    return (int)index;
 }
 
 
@@ -78,24 +77,20 @@ int CheckIndex(mobj_t *mo, unsigned int paramsize)
 // Simple flag changers
 //
 //==========================================================================
-void A_SetSolid(mobj_t * self)
-{
-	self->flags |= MF_SOLID;
+void A_SetSolid(mobj_t * self) {
+    self->flags |= MF_SOLID;
 }
 
-void A_UnsetSolid(mobj_t * self)
-{
-	self->flags &= ~MF_SOLID;
+void A_UnsetSolid(mobj_t * self) {
+    self->flags &= ~MF_SOLID;
 }
 
-void A_SetFloat(mobj_t * self)
-{
-	self->flags |= MF_FLOAT;
+void A_SetFloat(mobj_t * self) {
+    self->flags |= MF_FLOAT;
 }
 
-void A_UnsetFloat(mobj_t * self)
-{
-	self->flags &= ~(MF_FLOAT|MF_INFLOAT);
+void A_UnsetFloat(mobj_t * self) {
+    self->flags &= ~(MF_FLOAT|MF_INFLOAT);
 }
 
 //==========================================================================
@@ -105,13 +100,12 @@ void A_UnsetFloat(mobj_t * self)
 //
 //==========================================================================
 
-void A_PlaySoundParms(mobj_t * self)
-{
-	int index=CheckIndex(self, 1);
-	if (index<0) return;
+void A_PlaySoundParms(mobj_t * self) {
+    int index=CheckIndex(self, 1);
+    if (index<0) return;
 
-	int soundid = StateParameters[index];
-	S_StartSound(self, soundid);
+    int soundid = StateParameters[index];
+    S_StartSound(self, soundid);
 }
 
 //==========================================================================
@@ -129,42 +123,32 @@ void A_PlaySoundParms(mobj_t * self)
 //
 //----------------------------------------------------------------------------
 
-int P_FaceMobj(mobj_t *source, mobj_t *target, angle_t *delta)
-{
-	angle_t diff;
-	angle_t angle1;
-	angle_t angle2;
+int P_FaceMobj(mobj_t *source, mobj_t *target, angle_t *delta) {
+    angle_t diff;
+    angle_t angle1;
+    angle_t angle2;
 
-	angle1 = source->angle;
-	angle2 = R_PointToAngle2(source->x, source->y, target->x, target->y);
-	if (angle2 > angle1)
-	{
-		diff = angle2 - angle1;
-		if (diff > ANG180)
-		{
-			*delta = ANGLE_MAX - diff;
-			return 0;
-		}
-		else
-		{
-			*delta = diff;
-			return 1;
-		}
-	}
-	else
-	{
-		diff = angle1 - angle2;
-		if (diff > ANG180)
-		{
-			*delta = ANGLE_MAX - diff;
-			return 1;
-		}
-		else
-		{
-			*delta = diff;
-			return 0;
-		}
-	}
+    angle1 = source->angle;
+    angle2 = R_PointToAngle2(source->x, source->y, target->x, target->y);
+    if (angle2 > angle1) {
+        diff = angle2 - angle1;
+        if (diff > ANG180) {
+            *delta = ANGLE_MAX - diff;
+            return 0;
+        } else {
+            *delta = diff;
+            return 1;
+        }
+    } else {
+        diff = angle1 - angle2;
+        if (diff > ANG180) {
+            *delta = ANGLE_MAX - diff;
+            return 1;
+        } else {
+            *delta = diff;
+            return 0;
+        }
+    }
 }
 
 //----------------------------------------------------------------------------
@@ -176,63 +160,56 @@ int P_FaceMobj(mobj_t *source, mobj_t *target, angle_t *delta)
 //
 //----------------------------------------------------------------------------
 
-dboolean P_SeekerMissile(mobj_t *actor, angle_t thresh, angle_t turnMax)
-{
-	int dir;
-	int dist;
-	angle_t delta;
-	angle_t angle;
-	mobj_t *target;
+dboolean P_SeekerMissile(mobj_t *actor, angle_t thresh, angle_t turnMax) {
+    int dir;
+    int dist;
+    angle_t delta;
+    angle_t angle;
+    mobj_t *target;
 
-	target = actor->tracer;
-	if (target == NULL)
-	{
-		return false;
-	}
-	if (!(target->flags & MF_SHOOTABLE))
-	{ // Target died
-		actor->tracer = NULL;
-		return false;
-	}
-	dir = P_FaceMobj(actor, target, &delta);
-	if (delta > thresh)
-	{
-		delta >>= 1;
-		if (delta > turnMax)
-		{
-			delta = turnMax;
-		}
-	}
-	if (dir)
-	{ // Turn clockwise
-		actor->angle += delta;
-	}
-	else
-	{ // Turn counter clockwise
-		actor->angle -= delta;
-	}
-	angle = actor->angle >> ANGLETOFINESHIFT;
-	actor->momx = FixedMul(actor->info->speed, finecosine[angle]);
-	actor->momy = FixedMul(actor->info->speed, finesine[angle]);
-	if (actor->z + actor->height < target->z ||
-		target->z + target->height < actor->z)
-	{ // Need to seek vertically
-		dist = P_AproxDistance(target->x - actor->x, target->y - actor->y);
-		dist = dist / actor->info->speed;
-		if (dist < 1)
-		{
-			dist = 1;
-		}
-		actor->momz = ((target->z + target->height / 2) - (actor->z + actor->height / 2)) / dist;
-	}
-	return true;
+    target = actor->tracer;
+    if (target == NULL) {
+        return false;
+    }
+    if (!(target->flags & MF_SHOOTABLE)) {
+        // Target died
+        actor->tracer = NULL;
+        return false;
+    }
+    dir = P_FaceMobj(actor, target, &delta);
+    if (delta > thresh) {
+        delta >>= 1;
+        if (delta > turnMax) {
+            delta = turnMax;
+        }
+    }
+    if (dir) {
+        // Turn clockwise
+        actor->angle += delta;
+    } else {
+        // Turn counter clockwise
+        actor->angle -= delta;
+    }
+    angle = actor->angle >> ANGLETOFINESHIFT;
+    actor->momx = FixedMul(actor->info->speed, finecosine[angle]);
+    actor->momy = FixedMul(actor->info->speed, finesine[angle]);
+    if (actor->z + actor->height < target->z ||
+            target->z + target->height < actor->z) {
+        // Need to seek vertically
+        dist = P_AproxDistance(target->x - actor->x, target->y - actor->y);
+        dist = dist / actor->info->speed;
+        if (dist < 1) {
+            dist = 1;
+        }
+        actor->momz = ((target->z + target->height / 2) - (actor->z + actor->height / 2)) / dist;
+    }
+    return true;
 }
 
-void A_SeekerMissile(mobj_t * self)
-{
-	int index=CheckIndex(self, 2);
-	if (index < 0) return;
-	P_SeekerMissile(self, BETWEEN(StateParameters[index], 0, ANG90), BETWEEN(StateParameters[index + 1], 0, ANG90));
+void A_SeekerMissile(mobj_t * self) {
+    int index=CheckIndex(self, 2);
+    if (index < 0) return;
+    P_SeekerMissile(self, BETWEEN(StateParameters[index], 0, ANG90), BETWEEN(StateParameters[index + 1], 0, ANG90));
 }
 
 //==========================================================================
@@ -240,27 +217,25 @@ void A_SeekerMissile(mobj_t * self)
 // Hitscan attack with a customizable amount of bullets (specified in damage)
 //
 //==========================================================================
-void A_BulletAttack (mobj_t *self)
-{
-	int i;
-	int bangle;
-	int slope;
-		
-	if (!self->target) return;
+void A_BulletAttack (mobj_t *self) {
+    int i;
+    int bangle;
+    int slope;
 
-	A_FaceTarget (self);
-	bangle = self->angle;
+    if (!self->target) return;
 
-	slope = P_AimLineAttack (self, bangle, MISSILERANGE, 0);
+    A_FaceTarget (self);
+    bangle = self->angle;
 
-	S_StartSound (self, self->info->attacksound);
-	for (i=0 ; i<self->info->damage ; i++)
-    {
-		int r1 = P_Random(pr_cabullet) & 255;
-		int r2 = P_Random(pr_cabullet) & 255;
-		int angle = bangle + ((r1 - r2) << 20);
-		int damage = ((P_Random(pr_cabullet) % 5) + 1) * 3;
-		P_LineAttack(self, angle, MISSILERANGE, slope, damage);
+    slope = P_AimLineAttack (self, bangle, MISSILERANGE, 0);
+
+    S_StartSound (self, self->info->attacksound);
+    for (i=0 ; i<self->info->damage ; i++) {
+        int r1 = P_Random(pr_cabullet) & 255;
+        int r2 = P_Random(pr_cabullet) & 255;
+        int angle = bangle + ((r1 - r2) << 20);
+        int damage = ((P_Random(pr_cabullet) % 5) + 1) * 3;
+        P_LineAttack(self, angle, MISSILERANGE, slope, damage);
     }
 }
 
@@ -269,12 +244,11 @@ void A_BulletAttack (mobj_t *self)
 // State jump function
 //
 //==========================================================================
-void A_Jump(mobj_t * self)
-{
-	int index=CheckIndex(self, 2);
+void A_Jump(mobj_t * self) {
+    int index=CheckIndex(self, 2);
 
-	if (index>=0 && P_Random(pr_cajump) < BETWEEN(StateParameters[index], 0, 255))
-		P_SetMobjState(self, (statenum_t)StateParameters[index+1]);
+    if (index>=0 && P_Random(pr_cajump) < BETWEEN(StateParameters[index], 0, 255))
+        P_SetMobjState(self, (statenum_t)StateParameters[index+1]);
 }
 
 //==========================================================================
@@ -282,12 +256,11 @@ void A_Jump(mobj_t * self)
 // State jump function
 //
 //==========================================================================
-void A_JumpIfHealthLower(mobj_t * self)
-{
-	int index=CheckIndex(self, 2);
+void A_JumpIfHealthLower(mobj_t * self) {
+    int index=CheckIndex(self, 2);
 
-	if (index>=0 && self->health < StateParameters[index])
-		P_SetMobjState(self, (statenum_t)StateParameters[index + 1]);
+    if (index>=0 && self->health < StateParameters[index])
+        P_SetMobjState(self, (statenum_t)StateParameters[index + 1]);
 }
 
 //==========================================================================
@@ -295,17 +268,16 @@ void A_JumpIfHealthLower(mobj_t * self)
 // State jump function
 //
 //==========================================================================
-void A_JumpIfCloser(mobj_t * self)
-{
-	int index=CheckIndex(self, 2);
-	mobj_t * target = self->target;
+void A_JumpIfCloser(mobj_t * self) {
+    int index=CheckIndex(self, 2);
+    mobj_t * target = self->target;
 
-	// No target - no jump
-	if (target==NULL) return;
+    // No target - no jump
+    if (target==NULL) return;
 
-	fixed_t dist = StateParameters[index];
-	if (index>0 && P_AproxDistance(self->x-self->target->x, self->y-self->target->y) < dist)
-		P_SetMobjState(self, (statenum_t)StateParameters[index + 1]);
+    fixed_t dist = StateParameters[index];
+    if (index>0 && P_AproxDistance(self->x-self->target->x, self->y-self->target->y) < dist)
+        P_SetMobjState(self, (statenum_t)StateParameters[index + 1]);
 }
 
 //==========================================================================
@@ -314,19 +286,16 @@ void A_JumpIfCloser(mobj_t * self)
 //
 //==========================================================================
 
-void A_ExplodeParms (mobj_t *self)
-{
-	int damage = 128;
+void A_ExplodeParms (mobj_t *self) {
+    int damage = 128;
 
-	int index=CheckIndex(self, 1);
-	if (index>=0) 
-	{
-		if (StateParameters[index] != 0)
-		{
-			damage = StateParameters[index];
-		}
-	}
-	P_RadiusAttack (self, self->target, damage);
+    int index=CheckIndex(self, 1);
+    if (index>=0) {
+        if (StateParameters[index] != 0) {
+            damage = StateParameters[index];
+        }
+    }
+    P_RadiusAttack (self, self->target, damage);
 }
 
 
@@ -335,90 +304,81 @@ void A_ExplodeParms (mobj_t *self)
 // The ultimate code pointer: Fully customizable missiles!
 //
 //==========================================================================
-void A_CustomMissile(mobj_t * self)
-{
-	int index=CheckIndex(self, 5);
-	if (index<0) return;
+void A_CustomMissile(mobj_t * self) {
+    int index=CheckIndex(self, 5);
+    if (index<0) return;
 
-	mobjtype_t MissileName=(mobjtype_t)StateParameters[index];
-	fixed_t SpawnHeight=StateParameters[index+1];
-	fixed_t Spawnofs_XY=StateParameters[index+2];
-	angle_t Angle=StateParameters[index+3];
-	int aimmode = StateParameters[index + 4];
+    mobjtype_t MissileName=(mobjtype_t)StateParameters[index];
+    fixed_t SpawnHeight=StateParameters[index+1];
+    fixed_t Spawnofs_XY=StateParameters[index+2];
+    angle_t Angle=StateParameters[index+3];
+    int aimmode = StateParameters[index + 4];
 
-	mobj_t * targ;
-	mobj_t * missile;
+    mobj_t * targ;
+    mobj_t * missile;
 
-	if (self->target != NULL || aimmode==2)
-	{
-		if (MissileName > 0 /*&& MissileName < NumTypes*/ ) 
-		{
-			angle_t ang = (self->angle - ANG90) >> ANGLETOFINESHIFT;
-			fixed_t x = FixedMul(Spawnofs_XY, finecosine[ang]);
-			fixed_t y = FixedMul(Spawnofs_XY,finesine[ang]);
-			fixed_t z = SpawnHeight-32*FRACUNIT;
+    if (self->target != NULL || aimmode==2) {
+        if (MissileName > 0 /*&& MissileName < NumTypes*/ ) {
+            angle_t ang = (self->angle - ANG90) >> ANGLETOFINESHIFT;
+            fixed_t x = FixedMul(Spawnofs_XY, finecosine[ang]);
+            fixed_t y = FixedMul(Spawnofs_XY,finesine[ang]);
+            fixed_t z = SpawnHeight-32*FRACUNIT;
 
-			switch (aimmode)
-			{
-			case 0:
-				// This aims directly at the target
-				self->x+=x;
-				self->y+=y;
-				self->z+=z;
-				missile = P_SpawnMissile(self, self->target, MissileName);
-				self->x-=x;
-				self->y-=y;
-				self->z-=z;
-				break;
+            switch (aimmode) {
+                case 0:
+                    // This aims directly at the target
+                    self->x+=x;
+                    self->y+=y;
+                    self->z+=z;
+                    missile = P_SpawnMissile(self, self->target, MissileName);
+                    self->x-=x;
+                    self->y-=y;
+                    self->z-=z;
+                    break;
 
-			case 1:
-				// This aims parallel to the main missile
-				missile = P_SpawnMissile(self, self->target, MissileName);
-				missile->x += x;
-				missile->y += y;
-				missile->z += SpawnHeight;
-				break;
+                case 1:
+                    // This aims parallel to the main missile
+                    missile = P_SpawnMissile(self, self->target, MissileName);
+                    missile->x += x;
+                    missile->y += y;
+                    missile->z += SpawnHeight;
+                    break;
 
-			default:
-				return;
-			}
+                default:
+                    return;
+            }
 
-			if (missile)
-			{
-				// Use the actual momentum instead of the missile's Speed property
-				// so that this can handle missiles with a high vertical velocity 
-				// component properly.
-				double velocity[] = { (double)missile->momx, (double)missile->momy };
+            if (missile) {
+                // Use the actual momentum instead of the missile's Speed property
+                // so that this can handle missiles with a high vertical velocity
+                // component properly.
+                double velocity[] = { (double)missile->momx, (double)missile->momy };
 
-				fixed_t missilespeed = (fixed_t)sqrt(velocity[0] * velocity[0] + velocity[1] * velocity[1]);
+                fixed_t missilespeed = (fixed_t)sqrt(velocity[0] * velocity[0] + velocity[1] * velocity[1]);
 
-				missile->angle += Angle;
-				ang = missile->angle >> ANGLETOFINESHIFT;
-				missile->momx = FixedMul (missilespeed, finecosine[ang]);
-				missile->momy = FixedMul (missilespeed, finesine[ang]);
-	
-				// handle projectile shooting projectiles - track the
-				// links back to a real owner
-                if (self->flags&MF_MISSILE)
-                {
-                	mobj_t * owner=self ;//->target;
-                	while (owner->flags&MF_MISSILE && owner->target) owner=owner->target;
-                	targ=owner;
-                	missile->target=owner;
-					// automatic handling of seeker missiles
-					if (self->flags & missile->flags & MF_SEEKERMISSILE)
-					{
-						missile->tracer=self->tracer;
-					}
+                missile->angle += Angle;
+                ang = missile->angle >> ANGLETOFINESHIFT;
+                missile->momx = FixedMul (missilespeed, finecosine[ang]);
+                missile->momy = FixedMul (missilespeed, finesine[ang]);
+
+                // handle projectile shooting projectiles - track the
+                // links back to a real owner
+                if (self->flags&MF_MISSILE) {
+                    mobj_t * owner=self ;//->target;
+                    while (owner->flags&MF_MISSILE && owner->target) owner=owner->target;
+                    targ=owner;
+                    missile->target=owner;
+                    // automatic handling of seeker missiles
+                    if (self->flags & missile->flags & MF_SEEKERMISSILE) {
+                        missile->tracer=self->tracer;
+                    }
+                } else if (missile->flags & MF_SEEKERMISSILE) {
+                    // automatic handling of seeker missiles
+                    missile->tracer=self->target;
                 }
-				else if (missile->flags & MF_SEEKERMISSILE)
-				{
-					// automatic handling of seeker missiles
-					missile->tracer=self->target;
-				}
-			}
-		}
-	}
+            }
+        }
+    }
 }
 
 //==========================================================================
@@ -426,55 +386,50 @@ void A_CustomMissile(mobj_t * self)
 // An even more customizable hitscan attack
 //
 //==========================================================================
-fixed_t PitchToSlope(fixed_t pitch)
-{
-	// Taken from ZDoom's A_FireGoldWandPL2.
-	return finetangent[FINEANGLES / 4 - ((signed)pitch >> ANGLETOFINESHIFT)];
+fixed_t PitchToSlope(fixed_t pitch) {
+    // Taken from ZDoom's A_FireGoldWandPL2.
+    return finetangent[FINEANGLES / 4 - ((signed)pitch >> ANGLETOFINESHIFT)];
 }
 
-fixed_t SlopeToPitch(fixed_t slope)
-{
-	// extrapolated from how ZDoom calculates pitch where PrBoom calculates slope.
-	return -(int)R_PointToAngle2(0, 0, FRACUNIT, slope);
+fixed_t SlopeToPitch(fixed_t slope) {
+    // extrapolated from how ZDoom calculates pitch where PrBoom calculates slope.
+    return -(int)R_PointToAngle2(0, 0, FRACUNIT, slope);
 }
 
-void A_CustomBulletAttack (mobj_t *self)
-{
-	int index=CheckIndex(self, 4);
-	if (index<0) return;
+void A_CustomBulletAttack (mobj_t *self) {
+    int index=CheckIndex(self, 4);
+    if (index<0) return;
 
-	angle_t Spread_XY=StateParameters[index];
-	angle_t Spread_Z=StateParameters[index+1];
-	int NumBullets=StateParameters[index+2];
-	int DamagePerBullet=StateParameters[index+3];
+    angle_t Spread_XY=StateParameters[index];
+    angle_t Spread_Z=StateParameters[index+1];
+    int NumBullets=StateParameters[index+2];
+    int DamagePerBullet=StateParameters[index+3];
 
 
-	int i;
-	int bangle;
-	int bslope;
+    int i;
+    int bangle;
+    int bslope;
 
-	if (self->target)
-	{
-		A_FaceTarget(self);
-		bangle = self->angle;
+    if (self->target) {
+        A_FaceTarget(self);
+        bangle = self->angle;
 
-		bslope = P_AimLineAttack(self, bangle, MISSILERANGE, 0);
+        bslope = P_AimLineAttack(self, bangle, MISSILERANGE, 0);
 
-		S_StartSound(self, self->info->attacksound);
-		for (i = 0; i < NumBullets; i++)
-		{
-			int r1 = P_Random(pr_cabullet) & 255;
-			int r2 = P_Random(pr_cabullet) & 255;
-			int angle = bangle + (r1 - r2) * (Spread_XY / 255);
+        S_StartSound(self, self->info->attacksound);
+        for (i = 0; i < NumBullets; i++) {
+            int r1 = P_Random(pr_cabullet) & 255;
+            int r2 = P_Random(pr_cabullet) & 255;
+            int angle = bangle + (r1 - r2) * (Spread_XY / 255);
 
-			r1 = P_Random(pr_cabullet) & 255;
-			r2 = P_Random(pr_cabullet) & 255;
-			int slope = PitchToSlope(SlopeToPitch(bslope) + (r1 - r2) * (Spread_Z / 255));
+            r1 = P_Random(pr_cabullet) & 255;
+            r2 = P_Random(pr_cabullet) & 255;
+            int slope = PitchToSlope(SlopeToPitch(bslope) + (r1 - r2) * (Spread_Z / 255));
 
-			int damage = ((P_Random(pr_cabullet) % 3) + 1) * DamagePerBullet;
-			P_LineAttack(self, angle, MISSILERANGE, slope, damage);
-		}
-	}
+            int damage = ((P_Random(pr_cabullet) % 3) + 1) * DamagePerBullet;
+            P_LineAttack(self, angle, MISSILERANGE, slope, damage);
+        }
+    }
 }
 
 //===========================================================================
@@ -482,18 +437,17 @@ void A_CustomBulletAttack (mobj_t *self)
 // A_ChangeFlag
 //
 //===========================================================================
-void A_ChangeFlag(mobj_t * self)
-{
-	int index = CheckIndex(self, 2);
-	uint_64_t flagbit = uint_64_t(1) << StateParameters[index];
-	int set = StateParameters[index + 1];
+void A_ChangeFlag(mobj_t * self) {
+    int index = CheckIndex(self, 2);
+    uint_64_t flagbit = uint_64_t(1) << StateParameters[index];
+    int set = StateParameters[index + 1];
 
-	if (flagbit & (MF_NOBLOCKMAP | MF_NOSECTOR)) P_UnsetThingPosition(self);
+    if (flagbit & (MF_NOBLOCKMAP | MF_NOSECTOR)) P_UnsetThingPosition(self);
 
-	if (set) self->flags |= flagbit;
-	else self->flags &= flagbit;
+    if (set) self->flags |= flagbit;
+    else self->flags &= flagbit;
 
-	if (flagbit & (MF_NOBLOCKMAP | MF_NOSECTOR)) P_SetThingPosition(self);
+    if (flagbit & (MF_NOBLOCKMAP | MF_NOSECTOR)) P_SetThingPosition(self);
 }
 
 
@@ -506,23 +460,20 @@ void A_ChangeFlag(mobj_t * self)
 //
 //----------------------------------------------------------------------------
 
-extern "C" void A_Fall(mobj_t *actor)
-{
-	actor->flags &= ~MF_SOLID;
+extern "C" void A_Fall(mobj_t *actor) {
+    actor->flags &= ~MF_SOLID;
 
-	size_t index = actor->info->dropindex;
+    size_t index = actor->info->dropindex;
 
-	// If the actor has attached data for items to drop, drop those.
-	if (index >= 0 && index < DropItemList.Size())
-	{
-		FDropItem *di = DropItemList[index];
+    // If the actor has attached data for items to drop, drop those.
+    if (index >= 0 && index < DropItemList.Size()) {
+        FDropItem *di = DropItemList[index];
 
-		while (di != NULL)
-		{
-			mobj_t *mo = P_SpawnMobj(actor->x, actor->y, ONFLOORZ, di->mobjtype);
-			mo->flags |= MF_DROPPED;    // special versions of items
-			di = di->Next;
-		}
-	}
+        while (di != NULL) {
+            mobj_t *mo = P_SpawnMobj(actor->x, actor->y, ONFLOORZ, di->mobjtype);
+            mo->flags |= MF_DROPPED;    // special versions of items
+            di = di->Next;
+        }
+    }
 }
 

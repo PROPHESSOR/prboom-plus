@@ -38,124 +38,99 @@
 #include <stdlib.h>
 
 template <class T>
-class TArray
-{
-public:
-	TArray ()
-	{
-		Most = 0;
-		Count = 0;
-		Array = NULL;
-	}
-	TArray (int max)
-	{
-		Most = max;
-		Count = 0;
-		Array = (T *)malloc (sizeof(T)*max);
-	}
-	~TArray ()
-	{
-		if (Array)
-			free (Array);
-	}
-	T &operator[] (size_t index) const
-	{
-		return Array[index];
-	}
-	size_t Push (const T &item)
-	{
-		if (Count >= Most)
-		{
-			Most = (Most >= 16) ? Most + Most / 2 : 16;
-			Array = (T *)realloc (Array, sizeof(T)*Most);
-		}
-		Array[Count] = item;
-		return Count++;
-	}
-	bool Pop (T &item)
-	{
-		if (Count > 0)
-		{
-			item = Array[--Count];
-			return true;
-		}
-		return false;
-	}
-	void Delete (int index)
-	{
-		if (index < Count-1)
-			memmove (Array + index, Array + index + 1, (Count - index) * sizeof(T));
-		else if (index < Count)
-			Count--;
-	}
-	void ShrinkToFit ()
-	{
-		if (Most > Count)
-		{
-			Most = Count;
-			if (Most == 0)
-			{
-				if (Array != NULL)
-				{
-					free (Array);
-					Array = NULL;
-				}
-			}
-			else
-			{
-				Array = (T *)realloc (Array, sizeof(T)*Most);
-			}
-		}
-	}
-	// Grow Array to be large enough to hold amount more entries without
-	// further growing.
-	void Grow (size_t amount)
-	{
-		if (Count + amount > Most)
-		{
-			const size_t choicea = Count + amount;
-			const size_t choiceb = Most + Most/2;
-			Most = (choicea > choiceb ? choicea : choiceb);
-			Array = (T *)realloc (Array, sizeof(T)*Most);
-		}
-	}
-	// Resize Array so that it has exactly amount entries in use.
-	void Resize (size_t amount)
-	{
-		if (Count < amount)
-		{
-			Grow (amount - Count);
-		}
-		Count = amount;
-	}
-	// Reserves amount entries at the end of the array, but does nothing
-	// with them.
-	size_t Reserve (size_t amount)
-	{
-		if (Count + amount > Most)
-		{
-			Grow (amount);
-		}
-		size_t place = Count;
-		Count += amount;
-		return place;
-	}
-	size_t Size () const
-	{
-		return Count;
-	}
-	size_t Max () const
-	{
-		return Most;
-	}
-	void Clear ()
-	{
-		Count = 0;
-	}
-private:
-	T *Array;
-	size_t Most;
-	size_t Count;
+class TArray {
+  public:
+    TArray () {
+        Most = 0;
+        Count = 0;
+        Array = NULL;
+    }
+    TArray (int max) {
+        Most = max;
+        Count = 0;
+        Array = (T *)malloc (sizeof(T)*max);
+    }
+    ~TArray () {
+        if (Array)
+            free (Array);
+    }
+    T &operator[] (size_t index) const {
+        return Array[index];
+    }
+    size_t Push (const T &item) {
+        if (Count >= Most) {
+            Most = (Most >= 16) ? Most + Most / 2 : 16;
+            Array = (T *)realloc (Array, sizeof(T)*Most);
+        }
+        Array[Count] = item;
+        return Count++;
+    }
+    bool Pop (T &item) {
+        if (Count > 0) {
+            item = Array[--Count];
+            return true;
+        }
+        return false;
+    }
+    void Delete (int index) {
+        if (index < Count-1)
+            memmove (Array + index, Array + index + 1, (Count - index) * sizeof(T));
+        else if (index < Count)
+            Count--;
+    }
+    void ShrinkToFit () {
+        if (Most > Count) {
+            Most = Count;
+            if (Most == 0) {
+                if (Array != NULL) {
+                    free (Array);
+                    Array = NULL;
+                }
+            } else {
+                Array = (T *)realloc (Array, sizeof(T)*Most);
+            }
+        }
+    }
+    // Grow Array to be large enough to hold amount more entries without
+    // further growing.
+    void Grow (size_t amount) {
+        if (Count + amount > Most) {
+            const size_t choicea = Count + amount;
+            const size_t choiceb = Most + Most/2;
+            Most = (choicea > choiceb ? choicea : choiceb);
+            Array = (T *)realloc (Array, sizeof(T)*Most);
+        }
+    }
+    // Resize Array so that it has exactly amount entries in use.
+    void Resize (size_t amount) {
+        if (Count < amount) {
+            Grow (amount - Count);
+        }
+        Count = amount;
+    }
+    // Reserves amount entries at the end of the array, but does nothing
+    // with them.
+    size_t Reserve (size_t amount) {
+        if (Count + amount > Most) {
+            Grow (amount);
+        }
+        size_t place = Count;
+        Count += amount;
+        return place;
+    }
+    size_t Size () const {
+        return Count;
+    }
+    size_t Max () const {
+        return Most;
+    }
+    void Clear () {
+        Count = 0;
+    }
+  private:
+    T *Array;
+    size_t Most;
+    size_t Count;
 
 };
 

@@ -207,7 +207,7 @@
 #define MF_UNUSED2      (uint_64_t)(0x0000000010000000)
 #define MF_UNUSED3      (uint_64_t)(0x0000000020000000)
 
-    // Translucent sprite?                                          // phares
+// Translucent sprite?                                          // phares
 #define MF_TRANSLUCENT  (uint_64_t)(0x0000000040000000)
 
 // this is free            LONGLONG(0x0000000100000000)
@@ -228,19 +228,19 @@
 // fly mode is active
 #define MF_FLY             LONGLONG(0x0000020000000000)
 // higher attack probability like Cyberdemon, Spiderboss, Revenant and Lost Soul
-#define MF_MISSILEMORE     LONGLONG(0x0000040000000000)	
+#define MF_MISSILEMORE     LONGLONG(0x0000040000000000)
 // make full volume sounds non-hardcoded
-#define MF_FULLVOLSIGHT    LONGLONG(0x0000080000000000)	
-#define MF_FULLVOLDEATH    LONGLONG(0x0000100000000000)	
+#define MF_FULLVOLSIGHT    LONGLONG(0x0000080000000000)
+#define MF_FULLVOLDEATH    LONGLONG(0x0000100000000000)
 // make immunity to radius damage non-hardcoded
-#define MF_NORADIUSDMG     LONGLONG(0x0000200000000000)	
-// Arch Viles will immediately switch target if being attacked. 
-#define MF_QUICKTORETALIATE     LONGLONG(0x0000400000000000)	
+#define MF_NORADIUSDMG     LONGLONG(0x0000200000000000)
+// Arch Viles will immediately switch target if being attacked.
+#define MF_QUICKTORETALIATE     LONGLONG(0x0000400000000000)
 // just as it says. This is for generalizing the Lost Soul checks to be independent of type.
-#define MF_ISMONSTER		    LONGLONG(0x0000800000000000)	
+#define MF_ISMONSTER            LONGLONG(0x0000800000000000)
 // for the Lost Soul.
-#define MF_DONTFALL		    LONGLONG(0x0001000000000000)	
-#define MF_SEEKERMISSILE    LONGLONG(0x0002000000000000)	
+#define MF_DONTFALL         LONGLONG(0x0001000000000000)
+#define MF_SEEKERMISSILE    LONGLONG(0x0002000000000000)
 
 #define ALIVE(thing) ((thing->health > 0) && ((thing->flags & (MF_COUNTKILL | MF_CORPSE | MF_RESSURECTED)) == MF_COUNTKILL))
 
@@ -248,8 +248,8 @@
 // (some degree of opaqueness is good, to avoid compatibility woes)
 
 enum {
-  MIF_FALLING = 1,      // Object is falling
-  MIF_ARMED = 2,        // Object is armed (for MF_TOUCHY objects)
+    MIF_FALLING = 1,      // Object is falling
+    MIF_ARMED = 2,        // Object is armed (for MF_TOUCHY objects)
 };
 
 // Map Object definition.
@@ -271,8 +271,7 @@ enum {
 /* cph 2006/08/28 - move Prev[XYZ] fields to the end of the struct. Add any
  * other new fields to the end, and make sure you don't break savegames! */
 
-typedef struct mobj_s
-{
+typedef struct mobj_s {
     // List: thinker links.
     thinker_t           thinker;
 
@@ -382,7 +381,7 @@ typedef struct mobj_s
     int index;
     short patch_width;
 
-    int iden_nums;		// hi word stores thing num, low word identifier num
+    int iden_nums;      // hi word stores thing num, low word identifier num
 
     fixed_t             pad; // cph - needed so I can get the size unambiguously on amd64
 

@@ -76,18 +76,16 @@ void ST_Init(void);
 void ST_SetResolution(void);
 
 // States for status bar code.
-typedef enum
-{
-  AutomapState,
-  FirstPersonState
+typedef enum {
+    AutomapState,
+    FirstPersonState
 } st_stateenum_t;
 
 // States for the chat code.
-typedef enum
-{
-  StartChatState,
-  WaitDestState,
-  GetChatState
+typedef enum {
+    StartChatState,
+    WaitDestState,
+    GetChatState
 } st_chatstateenum_t;
 
 // killough 5/2/98: moved from m_misc.c:
@@ -107,10 +105,10 @@ extern int sts_traditional_keys;  // display keys the traditional way
 extern int st_palette;    // cph 2006/04/06 - make palette visible
 
 typedef enum {
-  ammo_colour_behaviour_no,
-  ammo_colour_behaviour_full_only,
-  ammo_colour_behaviour_yes,
-  ammo_colour_behaviour_max
+    ammo_colour_behaviour_no,
+    ammo_colour_behaviour_full_only,
+    ammo_colour_behaviour_yes,
+    ammo_colour_behaviour_max
 } ammo_colour_behaviour_t;
 extern ammo_colour_behaviour_t ammo_colour_behaviour;
 extern const char *ammo_colour_behaviour_list[];
